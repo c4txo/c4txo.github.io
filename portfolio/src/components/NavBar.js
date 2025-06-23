@@ -12,15 +12,15 @@ export default function NavBar() {
         <Image src="/home-icon.svg" alt="Home" width={20} height={20} className="mr-1 invert brightness-0" />
       </Link>
       <span>|</span>
-      <a href="/coming-soon" className="hover:underline">Brand Collaborations</a>
+      <Link href="/coming-soon" className="hover:underline">Brand Collaborations</Link>
       <span>/</span>
-      <a href="/coming-soon" className="hover:underline">Cosplays</a>
+      <Link href="/coming-soon" className="hover:underline">Cosplays</Link>
       <span>/</span>
-      <a href="/coming-soon" className="hover:underline">Event Appearances</a>
+      <Link href="/coming-soon" className="hover:underline">Event Appearances</Link>
       <span>/</span>
-      <a href="/coming-soon" className="hover:underline">Fashion</a>
+      <Link href="/coming-soon" className="hover:underline">Fashion</Link>
       <span>/</span>
-      <a href="/coming-soon" className="hover:underline">Maid Cafe</a>
+      <Link href="/coming-soon" className="hover:underline">Maid Cafe</Link>
     </span>
   );
 }
