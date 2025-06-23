@@ -19,7 +19,7 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full max-w-2xl">
         {/* Profile Picture */}
         <div className="flex flex-col items-center w-full">
-          <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-[#df2c9b] mb-4">
+          <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-[#ff6cb1] mb-4">
             <div className="w-full h-full scale-135 origin-center relative">
               <Image
                 src="/index.jpg"
@@ -95,7 +95,7 @@ export default function Home() {
                 />
               </a>
               <a
-                href="mailto:cthlynn@gmail.com"
+                href="mailto:ytcathlynn@gmail.com"
                 aria-label="Email"
                 className="transition-transform hover:scale-110"
               >
