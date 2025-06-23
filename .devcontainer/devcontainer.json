@@ -1,0 +1,19 @@
+// See https://containers.dev/implementors/json_reference/ for configuration reference
+{
+  "name": "dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "npm install",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Dev Server",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "mounts": [
+    //"source=${localWorkspaceFolder}/node_modules,target=/workspace/node_modules,type=volume"
+  ],
+  "remoteUser": "node"
+}
