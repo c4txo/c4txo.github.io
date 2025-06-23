@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
+import NavBar from "../components/NavBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +17,9 @@ export default function Home() {
     <div
       className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
     >
+      {/* Navigation Links */}
+      <NavBar />
+      <div className="h-14 sm:h-16" />
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full max-w-2xl">
         {/* Profile Picture */}
         <div className="flex flex-col items-center w-full">
@@ -73,7 +77,7 @@ export default function Home() {
             </div>
             <div>
               <span className="text-pink-500 mr-2">❤︎</span>
-              Special Guest Appearance (Guest/Model/Host/Other)
+              Special Event Appearance (Guest/Model/Host/Other)
             </div>
           </div>
           {/* Contact Section */}
