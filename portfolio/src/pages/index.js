@@ -16,7 +16,7 @@ export default function Home() {
             <div className="w-full h-full scale-135 origin-center relative">
               <Image
                 src="/index.jpg"
-                alt="Profile picture of Cat (@cthlynn)"
+                alt="Profile picture of Cat (@c4tx_o)"
                 width={192}
                 height={192}
                 className="object-cover w-full h-full absolute top-0 left-0"
@@ -31,7 +31,7 @@ export default function Home() {
           <h2 className="text-xl font-bold mb-2">Intro</h2>
           <p className="text-base leading-relaxed">
             My name is{" "}
-            <span className="font-semibold">Cat/@cthlynn</span> (she/her). I do
+            <span className="font-semibold">Cat/@c4tx_o</span> (she/her). I do
             fashion and cosplay modeling, sharing my work through content
             creation. I’ve collaborated with brands on a variety of projects, both
             online and in person. I’m located in Southern California, and travel
@@ -74,7 +74,7 @@ export default function Home() {
             <h3 className="text-lg font-bold mb-2">Contact Me</h3>
             <div className="flex gap-4">
               <a
-                href="https://instagram.com/cthlynn"
+                href="https://www.instagram.com/c4tx_o/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
