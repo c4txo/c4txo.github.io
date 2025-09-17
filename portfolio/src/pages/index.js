@@ -87,18 +87,6 @@ export default function Home() {
                   height={36}
                 />
               </a>
-              <a
-                href="mailto:ytcathlynn@gmail.com"
-                aria-label="Email"
-                className="transition-transform hover:scale-110"
-              >
-                <Image
-                  src="/email-icon.svg"
-                  alt="Email icon"
-                  width={36}
-                  height={36}
-                />
-              </a>
             </div>
           </div>
         </section>
