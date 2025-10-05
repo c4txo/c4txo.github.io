@@ -1,22 +1,12 @@
 // src/utils/assetScanner.js
 import fs from 'fs';
 import path from 'path';
+import { extractDateFromEventName } from './eventUtils';
 
 const ASSETS_DIR = path.join(process.cwd(), 'assets');
 const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 
-/**
- * Extract date from event name for sorting
- * Returns Date object or null if no valid date found
- */
-function extractDateFromEventName(eventName) {
-  const match = eventName.match(/_([0-9]{2})-([0-9]{2})-([0-9]{4})$/);
-  if (match) {
-    const [, month, day, year] = match;
-    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-  }
-  return null;
-}
+
 
 /**
  * Scans the assets directory and returns organized data for slideshows

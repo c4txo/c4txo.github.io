@@ -1,29 +1,7 @@
 // src/components/Slideshow.js
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-
-/**
- * Parse date from event name format: "Event Name_MM-DD-YYYY"
- * Returns formatted date as "MM/DD/YYYY" or null if invalid
- * The underscore is the explicit delimiter between event name and date
- */
-function parseEventDate(eventName) {
-  // Find the last underscore followed by date pattern
-  const match = eventName.match(/_([0-9]{2})-([0-9]{2})-([0-9]{4})$/);
-  if (match) {
-    const [, month, day, year] = match;
-    return `${month}/${day}/${year}`;
-  }
-  return null;
-}
-
-/**
- * Get display name without date suffix
- * Removes everything from the last underscore + date pattern
- */
-function getEventDisplayName(eventName) {
-  return eventName.replace(/_[0-9]{2}-[0-9]{2}-[0-9]{4}$/, '');
-}
+import { formatEventDate, getEventDisplayName } from '../utils/eventUtils';
 
 export default function Slideshow({ event, className = '', autoScrollInterval = 5000 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -131,8 +109,8 @@ export default function Slideshow({ event, className = '', autoScrollInterval = 
         {/* Event Title */}
         <div className="bg-pink-500 text-white px-4 py-2">
           <h3 className="font-bold text-lg">{getEventDisplayName(name)}</h3>
-          {parseEventDate(name) && (
-            <p className="text-pink-100 text-sm mb-1">{parseEventDate(name)}</p>
+          {formatEventDate(name) && (
+            <p className="text-pink-100 text-sm mb-1">{formatEventDate(name)}</p>
           )}
           <p className="text-pink-100 text-sm">{images.length} photos</p>
         </div>

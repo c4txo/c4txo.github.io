@@ -8,12 +8,13 @@ The Slideshow Factory is an automated photo gallery system for Cat's portfolio w
 
 ### Core Components
 
-1. **`assetScanner.js`** - Utility that scans directory structure and generates metadata
-2. **`SlideshowFactory.js`** - Main component that renders multiple slideshows per page
-3. **`Slideshow.js`** - Individual slideshow component with fade transitions, autoscroll, and modal
-4. **`CategoryPage.js`** - Generic reusable page component for all category pages
-5. **`[slug].js`** - Dynamic page router that handles any category URL
-6. **`NavBar.js`** - Updated navigation that links to generated pages
+1. **`assetScanner.js`** - Server-side utility that scans directory structure and generates metadata
+2. **`eventUtils.js`** - Client-safe utility functions for event name parsing and date formatting
+3. **`SlideshowFactory.js`** - Main component that renders multiple slideshows per page
+4. **`Slideshow.js`** - Individual slideshow component with fade transitions, autoscroll, and modal
+5. **`CategoryPage.js`** - Generic reusable page component for all category pages
+6. **`[slug].js`** - Dynamic page router that handles any category URL
+7. **`NavBar.js`** - Updated navigation that links to generated pages
 
 ### Directory Structure Convention
 
@@ -47,6 +48,33 @@ The `assetScanner.js` utility:
 - **Sorts events** by date in descending order (newest first)
 - Generates metadata for each page and event
 - Supports JPG, JPEG, PNG, GIF, WebP formats
+
+### 2. Utility Functions Architecture
+
+**Client/Server Separation**: The system uses two utility files to handle Next.js client/server constraints:
+
+#### `eventUtils.js` (Client-Safe Utilities)
+- **Purpose**: Event name parsing and date formatting functions
+- **Usage**: Imported by React components (SlideshowFactory, Slideshow)
+- **Location**: `src/utils/eventUtils.js`
+- **Functions**:
+  - `extractDateFromEventName(eventName)` - Returns Date object from event name
+  - `formatEventDate(eventName)` - Returns "MM/DD/YYYY" string for display
+  - `getEventDisplayName(eventName)` - Returns event name without date suffix
+- **Key Feature**: No Node.js dependencies, safe for client-side use
+
+#### `assetScanner.js` (Server-Side Utilities)
+- **Purpose**: File system operations and asset scanning
+- **Usage**: Server-side operations (getStaticProps, build time)
+- **Location**: `src/utils/assetScanner.js`
+- **Dependencies**: Node.js `fs` and `path` modules
+- **Functions**: Asset scanning, directory operations, page generation
+- **Important**: Imports `extractDateFromEventName` from `eventUtils.js` for consistency
+
+**Why This Architecture?**
+- Next.js components can't import Node.js modules on the client-side
+- Separating utilities allows code reuse while maintaining build compatibility
+- Single source of truth for date parsing logic across client and server
 
 ### 2. Page Generation
 
@@ -168,6 +196,39 @@ const maidCafeData = getPageAssets('Maid Cafe');
 console.log('Maid Cafe events:', Object.keys(maidCafeData.events));
 ```
 
+#### Using Utility Functions
+
+**In Client Components (React components):**
+```javascript
+import { formatEventDate, getEventDisplayName, extractDateFromEventName } from '../utils/eventUtils';
+
+// Format event date for display
+const displayDate = formatEventDate('Summer Concert_08-15-2025'); // Returns "08/15/2025"
+
+// Get clean event name
+const eventName = getEventDisplayName('Summer Concert_08-15-2025'); // Returns "Summer Concert"
+
+// Get Date object for sorting/comparison
+const dateObj = extractDateFromEventName('Summer Concert_08-15-2025'); // Returns Date(2025, 7, 15)
+```
+
+**In Server-Side Code (getStaticProps, API routes):**
+```javascript
+import { scanAssets, getPageAssets } from '../utils/assetScanner';
+import { extractDateFromEventName } from '../utils/eventUtils';
+
+// Server-side asset scanning
+const pageData = getPageAssets('Maid Cafe');
+
+// Can also use eventUtils functions on server-side
+const eventDate = extractDateFromEventName('Concert_12-25-2025');
+```
+
+**Important Notes:**
+- Always use `eventUtils.js` functions in React components
+- `assetScanner.js` is for server-side operations only
+- Both files share the same date parsing logic for consistency
+
 #### Creating Custom Page Layouts
 ```javascript
 // Using the generic CategoryPage component (recommended)
@@ -258,7 +319,8 @@ import { EventGrid } from '../components/SlideshowFactory';
 ## Quick Reference
 
 ### File Locations
-- Asset Scanner: `src/utils/assetScanner.js`
+- **Server Utilities**: `src/utils/assetScanner.js` (Node.js modules)
+- **Client Utilities**: `src/utils/eventUtils.js` (client-safe functions)
 - Main Component: `src/components/SlideshowFactory.js`  
 - Slideshow Component: `src/components/Slideshow.js`
 - Category Page: `src/components/CategoryPage.js`

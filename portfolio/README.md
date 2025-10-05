@@ -1,40 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Cat's Portfolio Website
 
-## Getting Started
+A modern, dynamic portfolio website built with Next.js featuring an intelligent slideshow factory system for showcasing photography and event galleries. Fully supports agentic development.
 
-First, run the development server:
+## Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Dynamic Slideshow Factory**: Automatically generates photo galleries from asset directory structure
+- **Static Site Generation**: Fast, SEO-friendly pages with Next.js
+- **Automatic Asset Management**: Seamless copying of assets to public directory
+- **File-Based Content**: No database required - content managed through file structure
+
+## Tech Stack
+
+- **Frontend**: Next.js 15.3.4, React 19, Tailwind CSS 4
+- **Deployment**: GitHub Pages with static export
+- **Asset Management**: Automated copying system
+- **Routing**: Dynamic page generation based on portfolio categories
+
+## Project Structure
+
+```
+portfolio/
+├── src/
+│   ├── components/          # React components
+│   │   ├── SlideshowFactory.js  # Main slideshow system
+│   │   ├── Slideshow.js         # Individual slideshow component
+│   │   └── CategoryPage.js      # Reusable page template
+│   ├── pages/               # Next.js pages and routing
+│   └── utils/               # Utility functions
+├── assets/                  # Source images (organized by category/event)
+├── public/                  # Static assets (auto-generated)
+└── agents_dev.md           # Comprehensive development guide
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How It Works
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+1. **Content Organization**: Photos are organized in `assets/[Category]/[Event Name_MM-DD-YYYY]/`
+2. **Automatic Processing**: The system scans the asset directory and generates metadata
+3. **Dynamic Pages**: Each category gets its own page with multiple event slideshows
+4. **Sorting**: Events are sorted by date (newest first) with intelligent parsing
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## For AI Agents & Developers
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+**Important**: This project includes a comprehensive development guide specifically designed for AI agents and developers.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+👉 **Please refer to [`agents_dev.md`](./agents_dev.md) for detailed development instructions, architecture explanations, troubleshooting guides, and best practices.**
 
-## Learn More
+The agents development guide contains:
+- Complete system architecture documentation
+- Step-by-step development workflows  
+- Code examples and patterns
+- Troubleshooting and debugging guides
+- Best practices for extending the system
+- Asset management workflows
+- Deployment procedures
 
-To learn more about Next.js, take a look at the following resources:
+## Quick Start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Add Content**: Place images in `assets/[Category]/[Event Name_MM-DD-YYYY]/`
 
-## Deploy on Vercel
+3. **Start Development**:
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Build for Production**:
+   ```bash
+   npm run build
+   npm run export
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## Portfolio Categories
+
+The website dynamically supports any portfolio categories you create in the assets directory. Current categories may include:
+- Maid Cafe events
+- Photoshoots
+- Conventions
+- Cosplay galleries
+- And more...
+
+## Live Site
+
+Visit the live portfolio at: [c4txo.github.io](https://c4txo.github.io)
+
+## License
+
+This project is for Cat's personal portfolio. Please respect the content and photography.
+
+---
+
+## TODOs
+
+Slideshows need to be added to the following:
+
+[x] Maid Cafe
+[] Fashion
+[] Brand Collaborations
+[] Event Appearances
+[] Fashion

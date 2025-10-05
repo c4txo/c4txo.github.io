@@ -1,28 +1,6 @@
 // src/components/SlideshowFactory.js
 import Slideshow from './Slideshow';
-
-/**
- * Parse date from event name format: "Event Name_MM-DD-YYYY"
- * Returns formatted date as "MM/DD/YYYY" or null if invalid
- * The underscore is the explicit delimiter between event name and date
- */
-function parseEventDate(eventName) {
-  // Find the last underscore followed by date pattern
-  const match = eventName.match(/_([0-9]{2})-([0-9]{2})-([0-9]{4})$/);
-  if (match) {
-    const [, month, day, year] = match;
-    return `${month}/${day}/${year}`;
-  }
-  return null;
-}
-
-/**
- * Get display name without date suffix
- * Removes everything from the last underscore + date pattern
- */
-function getEventDisplayName(eventName) {
-  return eventName.replace(/_[0-9]{2}-[0-9]{2}-[0-9]{4}$/, '');
-}
+import { formatEventDate, getEventDisplayName } from '../utils/eventUtils';
 
 /**
  * SlideshowFactory - Dynamically creates slideshows based on page assets
@@ -146,8 +124,8 @@ export function EventGrid({
               <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
                 <h3 className="text-white font-bold text-lg">{getEventDisplayName(event.name)}</h3>
-                {parseEventDate(event.name) && (
-                  <p className="text-white/90 text-sm mb-1">{parseEventDate(event.name)}</p>
+                {formatEventDate(event.name) && (
+                  <p className="text-white/90 text-sm mb-1">{formatEventDate(event.name)}</p>
                 )}
                 <p className="text-white/80 text-sm">{event.count} photos</p>
               </div>
