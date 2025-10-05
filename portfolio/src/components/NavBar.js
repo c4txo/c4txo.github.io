@@ -20,7 +20,7 @@ export default function NavBar() {
       <span>/</span>
       <Link href="/coming-soon" className="hover:underline">Fashion</Link>
       <span>/</span>
-      <Link href="/coming-soon" className="hover:underline">Maid Cafe</Link>
+      <Link href="/maidcafe" className="hover:underline">Maid Cafe</Link>
     </span>
   );
 }
