@@ -1,4 +1,5 @@
 // src/pages/[slug].js
+import Link from 'next/link';
 import CategoryPage from '../components/CategoryPage';
 import NavBar from '../components/NavBar';
 import { getAllPageSlugs, getPageAssets, slugToPageName } from '../utils/assetScanner';
@@ -13,15 +14,15 @@ export default function DynamicPage({ pageAssets, pageName, slug }) {
         <main className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-3xl font-bold text-gray-600 mb-4">Page Not Found</h1>
           <p className="text-gray-500 mb-8">
-            No assets found for "{slug}". Make sure you have photos in the assets directory.
+            No assets found for &quot;{slug}&quot;. Make sure you have photos in the assets directory.
           </p>
           
-          <a 
+          <Link 
             href="/"
             className="inline-block bg-pink-500 text-white px-6 py-2 rounded hover:bg-pink-600 transition-colors"
           >
             ← Back to Portfolio
-          </a>
+          </Link>
         </main>
       </div>
     );

@@ -181,6 +181,82 @@ Modify the page file (e.g., `pages/maidcafe.js`) or the dynamic page template (`
 2. "Brand Collaborations" → "brandcollaborations"
 3. Update NavBar links if needed
 
+#### Build and Deployment Issues
+
+**ESLint Errors During Build:**
+
+1. **React Hooks Rules Violations:**
+   - Error: `React Hook "useState" is called conditionally`
+   - Solution: Ensure early returns happen before any hooks
+   - Pattern: Use wrapper components or move validation before hook declarations
+
+2. **Next.js Link Requirements:**
+   - Error: `Do not use an <a> element to navigate to /. Use <Link /> from next/link`
+   - Solution: Always use `import Link from 'next/link'` and `<Link href="/">` for internal navigation
+   - Replace: `<a href="/">` → `<Link href="/">`
+
+3. **Image Optimization Warnings:**
+   - Error: `Using <img> could result in slower LCP and higher bandwidth`
+   - Solution: Use `import Image from 'next/image'` and `<Image>` component
+   - Replace: `<img src="...">` → `<Image src="..." fill />` or with width/height
+
+4. **Unescaped Characters:**
+   - Error: `can be escaped with &quot;, &ldquo;, &#34;, &rdquo;`
+   - Solution: Escape quotes in JSX content
+   - Replace: `"text"` → `&quot;text&quot;`
+
+**Conflicting Routes:**
+- Error: `Conflicting paths returned from getStaticPaths`
+- Cause: Having both specific page files (e.g., `maidcafe.js`) and dynamic routing (`[slug].js`)
+- Solution: Remove specific page files, use only dynamic routing for portfolio pages
+
+**Build Process:**
+```bash
+# Development
+npm run dev          # Start development server with hot reload
+
+# Production Build
+npm run build        # Creates optimized static files in /out directory
+                     # Automatically handles asset copying and static export
+
+# Common Build Issues:
+# 1. Clear .next cache if strange errors occur
+rm -rf .next
+
+# 2. Ensure assets directory exists and has proper structure
+# 3. Check that next.config.mjs has proper static export configuration
+# 4. Verify all components follow Next.js best practices
+```
+
+**Deployment Workflow:**
+- GitHub Actions automatically builds on push to main branch
+- Uses `npm run build` which includes static export
+- Deploys `/out` directory to GitHub Pages
+- Asset copying happens automatically during build
+
+**Best Practices to Prevent Build Issues:**
+
+1. **Always test builds locally before pushing:**
+   ```bash
+   npm run build  # Must complete without errors
+   ```
+
+2. **Component Development Guidelines:**
+   - Use Next.js `<Link>` for internal navigation, never `<a href>`
+   - Use Next.js `<Image>` instead of `<img>` for better performance
+   - Put early returns before any React hooks
+   - Escape special characters in JSX content
+
+3. **Utility Function Guidelines:**
+   - Import from `eventUtils.js` in client components
+   - Import from `assetScanner.js` only in server-side code
+   - Never import Node.js modules in client components
+
+4. **Route Management:**
+   - Use only dynamic routing `[slug].js` for portfolio pages
+   - Remove specific page files to avoid conflicts
+   - Ensure `getStaticPaths` returns unique paths
+
 ### Code Patterns for Agents
 
 #### Checking Available Assets

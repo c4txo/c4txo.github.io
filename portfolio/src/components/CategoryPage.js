@@ -1,4 +1,5 @@
 // src/components/CategoryPage.js
+import Link from 'next/link';
 import NavBar from './NavBar';
 import SlideshowFactory from './SlideshowFactory';
 
@@ -25,12 +26,12 @@ export default function CategoryPage({
 
       {/* Back to Portfolio Link */}
       <div className="text-center py-8">
-        <a 
+        <Link 
           href="/"
           className="inline-block bg-pink-500 text-white px-6 py-2 rounded hover:bg-pink-600 transition-colors"
         >
           ← Back to Portfolio
-        </a>
+        </Link>
       </div>
     </div>
   );

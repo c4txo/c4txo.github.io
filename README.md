@@ -43,7 +43,7 @@ portfolio/
 
 **Important**: This project includes a comprehensive development guide specifically designed for AI agents and developers.
 
-👉 **Please refer to [`agents_dev.md`](./agents_dev.md) for detailed development instructions, architecture explanations, troubleshooting guides, and best practices.**
+👉 **Please refer to [`agents_dev.md`](./portfolio/agents_dev.md) for detailed development instructions, architecture explanations, troubleshooting guides, and best practices.**
 
 The agents development guide contains:
 - Complete system architecture documentation

@@ -1,4 +1,5 @@
 // src/components/SlideshowFactory.js
+import Image from 'next/image';
 import Slideshow from './Slideshow';
 import { formatEventDate, getEventDisplayName } from '../utils/eventUtils';
 
@@ -116,10 +117,11 @@ export function EventGrid({
             className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
           >
             <div className="relative aspect-[4/3] bg-gray-100 flex items-center justify-center">
-              <img
+              <Image
                 src={event.coverImage.path}
                 alt={`${event.name} cover`}
-                className="w-full h-full object-contain"
+                fill
+                className="object-contain"
               />
               <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
