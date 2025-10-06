@@ -11,6 +11,7 @@ import { formatEventDate, getEventDisplayName } from '../utils/eventUtils';
  * @param {boolean} showTitle - Whether to show the page title
  * @param {number} maxColumns - Maximum number of columns in grid layout
  * @param {boolean} disableAutoScroll - Disable auto-scrolling (default: true)
+ * @param {boolean} showPhotoCredits - Show photographer credits from filenames (default: true)
  */
 export default function SlideshowFactory({ 
   pageAssets, 
@@ -18,7 +19,8 @@ export default function SlideshowFactory({
   className = '',
   showTitle = true,
   maxColumns = 3,
-  disableAutoScroll = true
+  disableAutoScroll = true,
+  showPhotoCredits = true
 }) {
   if (!pageAssets || !pageAssets.events || Object.keys(pageAssets.events).length === 0) {
     return (
@@ -75,6 +77,7 @@ export default function SlideshowFactory({
               event={event} 
               className={layout === 'stack' ? 'max-w-2xl mx-auto' : ''}
               disableAutoScroll={disableAutoScroll}
+              showPhotoCredits={showPhotoCredits}
             />
           </div>
         ))}

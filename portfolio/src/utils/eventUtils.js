@@ -35,3 +35,22 @@ export function formatEventDate(eventName) {
 export function getEventDisplayName(eventName) {
   return eventName.replace(/_\d{2}-\d{2}-\d{4}$/, '');
 }
+
+/**
+ * Extract photographer credit from filename
+ * Returns credit text from parentheses or null if not found
+ * Example: "photo (photo: @foobar).jpg" → "photo: @foobar"
+ */
+export function extractPhotoCredit(filename) {
+  const match = filename.match(/\(([^)]+)\)(?:\.[^.]*)?$/);
+  return match ? match[1] : null;
+}
+
+/**
+ * Get clean image name without credit and extension
+ * Removes credit parentheses and file extension
+ * Example: "lvlup_1 (photo: @foobar).jpeg" → "lvlup_1"
+ */
+export function getCleanImageName(filename) {
+  return filename.replace(/\s*\([^)]*\)(?:\.[^.]*)?$/, '').replace(/\.[^.]*$/, '');
+}

@@ -1,0 +1,37 @@
+name: Assets Validation and Tests
+
+on:
+  push:
+    branches: [ '*' ]  # Run on all branches
+  pull_request:
+    branches: [ 'main' ]
+
+jobs:
+  validate-assets:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: portfolio/package-lock.json
+        
+    - name: Install dependencies
+      run: |
+        cd portfolio
+        npm ci
+        
+    - name: Run asset validation
+      run: |
+        cd portfolio
+        npm run validate:assets
+        
+    - name: Build project (includes validation)
+      run: |
+        cd portfolio
+        npm run build

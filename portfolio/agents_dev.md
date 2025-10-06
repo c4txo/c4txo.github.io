@@ -2,7 +2,19 @@
 
 ## System Overview
 
-The Slideshow Factory is an automated photo gallery system for Cat's portfolio website that dynamically generates slideshows based on directory structure. It eliminates the need for manual page creation by automatically scanning the `assets/` directory and creating responsive photo galleries.
+The Slideshow Factory is an automated photo gallery system for Cat's portfolio website that dynamically generates slideshows based on directory structure. It eliminates t**Integration with CI/CD**
+
+**Automatic Validation:**
+- Validation runs automatically before every build (`npm run prebuild`)
+- GitHub Actions validates on push/PR
+- Deployment fails if asset conventions are violated
+- Ensures slideshow factory conventions are maintained
+
+**Pre-commit Validation Workflow:**
+1. Add new images to proper event directories
+2. Run `npm run validate:assets` to check structure
+3. Fix any violations before committing
+4. Validation ensures slideshow factory works correctlyanual page creation by automatically scanning the `assets/` directory and creating responsive photo galleries.
 
 ## Architecture
 
@@ -134,6 +146,7 @@ console.log(assets); // Should show new Fashion page
   maxColumns={3}           // 1-4 columns for grid layout
   showTitle={true}         // Show/hide page title
   disableAutoScroll={true} // Disable auto-scroll for ALL slideshows (default: true)
+  showPhotoCredits={true}  // Show photographer credits for ALL slideshows (default: true)
   className="custom"       // Additional CSS classes
 />
 ```
@@ -151,6 +164,7 @@ Modify the page file (e.g., `pages/maidcafe.js`) or the dynamic page template (`
   event={event} 
   autoScrollInterval={8000}     // Auto-advance interval (default: 8 seconds)
   disableAutoScroll={true}      // Disable auto-scrolling (default: true)
+  showPhotoCredits={true}       // Show photographer credits (default: true)
   className="custom-class"      // Additional styling
 />
 ```
@@ -161,10 +175,18 @@ Modify the page file (e.g., `pages/maidcafe.js`) or the dynamic page template (`
 - Users can still manually toggle auto-scroll using the play/pause button
 - Parameter only affects the initial state, not the user's ability to control it
 
+**Photographer Credit Control**:
+- `showPhotoCredits={true}` (default): Display info button for images with credits
+- `showPhotoCredits={false}`: Hide all photographer credit functionality
+- Credits are parsed from filename format: `"image (credit info).ext"`
+- Info button (ⓘ) appears only when credit exists in filename
+- Expandable panel shows credit on click, auto-hides on image change
+
 **Built-in Features**:
 - **Fade Transitions**: Smooth 300ms fade between images
 - **Autoscroll**: Automatic advancement with play/pause control (disabled by default)
 - **Auto-Scroll Control**: Configurable via `disableAutoScroll` parameter
+- **Photographer Credits**: Expandable info panel for photo attribution (filename-based)
 - **Full Screen Modal**: Click any image for full-screen viewing
 - **Navigation**: Arrow keys, thumbnails, and navigation buttons
 - **Date Display**: Automatically parses and shows event dates
@@ -189,6 +211,110 @@ Modify the page file (e.g., `pages/maidcafe.js`) or the dynamic page template (`
 1. Page names convert to lowercase, remove spaces/special chars
 2. "Brand Collaborations" → "brandcollaborations"
 3. Update NavBar links if needed
+
+### Asset Structure Validation & Testing
+
+**CRITICAL: Always validate asset structure before deploying!** The slideshow factory depends on strict directory and naming conventions. Use the comprehensive test suite to catch issues early.
+
+#### Running Validation Tests
+
+**Primary Command:**
+```bash
+# Asset validation - validates all conventions
+npm run validate:assets
+```
+
+#### What Gets Validated
+
+**Directory Structure Requirements:**
+- ✅ Three-level hierarchy: `assets/[Page]/[Event]/[Images]`
+- ✅ Event naming: `"Event Name_MM-DD-YYYY"` format
+- ✅ Date validity: Real dates only (no Feb 30th, etc.)
+- ✅ Image formats: JPG, JPEG, PNG, GIF, WebP only
+- ✅ Photographer credits: `"image (credit info).ext"` format
+- ✅ Security: No path traversal attempts
+- ✅ File integrity: Valid image files, no corrupted data
+
+**Test Results Interpretation:**
+```bash
+# ✅ VALID - All conventions followed
+Status: ✅ VALID
+Pages: 5, Events: 12, Images: 87
+
+# ❌ INVALID - Violations found  
+Status: ❌ INVALID
+❌ Errors (3):
+  - Event "Bad Event-2025-01-01" does not follow naming convention
+  - Invalid date "02-30-2025" (not a real date)
+  - Invalid image format "document.pdf"
+
+# ⚠️  Warnings - Non-critical issues
+⚠️  Warnings (2):  
+  - Page "Brand Collaborations" has no event directories
+  - Event contains non-image files: readme.txt
+```
+
+#### Integration with CI/CD
+
+**Automatic Validation:**
+- Tests run automatically before every build (`npm run prebuild`)
+- GitHub Actions validates on push/PR
+- Deployment fails if asset conventions are violated
+- Coverage reports track validation thoroughness
+
+**Pre-commit Validation Workflow:**
+1. Add new images to proper event directories
+2. Run `npm run validate:assets` to check structure
+3. Fix any violations before committing
+4. Tests ensure slideshow factory works correctly
+
+#### Common Validation Failures & Fixes
+
+**Event Naming Violations:**
+```bash
+# ❌ Wrong format
+assets/Portfolio/PhotoShoot-01-15-2025/    # Missing space before date
+assets/Portfolio/Photo Shoot 01-15-2025/   # Missing underscore
+assets/Portfolio/Photo Shoot_2025-01-15/   # Wrong date format
+
+# ✅ Correct format  
+assets/Portfolio/Photo Shoot_01-15-2025/   # Event Name_MM-DD-YYYY
+```
+
+**Date Format Issues:**
+```bash
+# ❌ Invalid dates
+Summer Event_13-01-2025    # Month 13 doesn't exist
+Winter Shoot_02-30-2025    # Feb 30th doesn't exist  
+New Year_01-32-2025        # Day 32 doesn't exist
+
+# ✅ Valid dates
+Summer Event_12-01-2025    # December 1st
+Winter Shoot_02-28-2025    # February 28th
+New Year_01-31-2025        # January 31st
+```
+
+**Image Format Problems:**
+```bash
+# ❌ Unsupported formats
+photo.bmp, image.tiff, file.pdf, video.mp4
+
+# ✅ Supported formats
+photo.jpg, image.png, graphic.gif, modern.webp
+```
+
+**Photographer Credit Format:**
+```bash
+# ❌ Wrong format  
+"photo-by-john.jpg"        # No parentheses
+"photo (no space).jpg"     # No space before parentheses  
+"photo ().jpg"             # Empty credit
+
+# ✅ Correct format
+"sunset (photo: @john).jpg"      # Proper credit format
+"portrait (credit: Jane).png"    # Alternative credit style
+"landscape (by: Studio).gif"     # Flexible credit text
+```
 
 #### Build and Deployment Issues
 
@@ -314,6 +440,26 @@ const eventDate = extractDateFromEventName('Concert_12-25-2025');
 - `assetScanner.js` is for server-side operations only
 - Both files share the same date parsing logic for consistency
 
+#### Photographer Credit Functions
+
+**In Client Components (React components):**
+```javascript
+import { extractPhotoCredit, getCleanImageName } from '../utils/eventUtils';
+
+// Extract credit from filename
+const credit = extractPhotoCredit('photo (photo: @srdlj).jpg'); // Returns "photo: @srdlj"
+const noCredit = extractPhotoCredit('photo.jpg'); // Returns null
+
+// Get clean filename
+const cleanName = getCleanImageName('photo (photo: @srdlj).jpg'); // Returns "photo"
+```
+
+**Filename Format Convention:**
+- Format: `"image_name (credit_info).extension"`
+- Example: `"lvlup_1 (photo: @srdlj).jpeg"`
+- Credit text: Everything inside parentheses
+- Works with any file extension: jpg, jpeg, png, gif, webp
+
 #### Auto-Scroll Control Patterns
 
 **Enable auto-scroll for all slideshows on a page:**
@@ -421,7 +567,12 @@ import { EventGrid } from '../components/SlideshowFactory';
 6. **Performance**: Keep individual events to ~20-50 images max for optimal loading
 7. **Testing**: Always test slideshow functionality including autoscroll and fade transitions
 8. **Auto-Scroll Settings**: Consider user experience - disable for detailed viewing, enable for ambient display
-9. **File Extensions**: Use supported formats: JPG, JPEG, PNG, GIF, WebP
+9. **Photographer Credits**: Use consistent filename format for attribution
+   - Format: `"image_name (credit_info).extension"`
+   - Example: `"photo_1 (photo: @username).jpg"`
+   - Credit appears as expandable info panel
+   - Only shows when credit exists in filename
+10. **File Extensions**: Use supported formats: JPG, JPEG, PNG, GIF, WebP
 
 ### System Limitations
 
@@ -444,12 +595,22 @@ import { EventGrid } from '../components/SlideshowFactory';
 ## Quick Reference
 
 ### File Locations
+
+**Core Components:**
 - **Server Utilities**: `src/utils/assetScanner.js` (Node.js modules)
 - **Client Utilities**: `src/utils/eventUtils.js` (client-safe functions)
+  - `extractPhotoCredit(filename)`: Parse photographer credit from filename
+  - `getCleanImageName(filename)`: Get display name without credit info
 - Main Component: `src/components/SlideshowFactory.js`  
 - Slideshow Component: `src/components/Slideshow.js`
 - Category Page: `src/components/CategoryPage.js`
 - Dynamic Pages: `src/pages/[slug].js`
+
+**Testing & Validation:**
+- **Asset Validator**: `src/utils/validateAssetsRunner.js` (structure validation utility)
+- **CI/CD Workflow**: `/.github/workflows/test-assets.yml` (automated validation)
+
+**Directory Structure:**
 - Assets Directory: `assets/[Page]/[Event Name_MM-DD-YYYY]/images...`
 - Auto-copied to: `public/assets/[Page]/[Event]/images...`
 
@@ -464,4 +625,31 @@ import { EventGrid } from '../components/SlideshowFactory';
 - **Event Names**: `"Event Name_MM-DD-YYYY"` (spaces allowed, underscore delimiter)
 - **Auto-Detection**: Automatic scanning, sorting, and page generation
 - **Auto-Copy**: Automatic asset copying from `assets/` to `public/assets/`
-- **Features**: Fade transitions, autoscroll, date parsing, full-screen modal
+- **Features**: Fade transitions, autoscroll, date parsing, full-screen modal, photographer credits
+- **Photo Credits**: `"filename (credit_info).extension"` format in image names
+- **Testing**: Integration tests validate all conventions automatically
+
+### NPM Scripts
+
+**Development:**
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build optimized static files for production
+- `npm run start` - Start production server (after build)
+- `npm run lint` - Check code style and quality
+
+**Testing & Validation:**
+- `npm run validate:assets` - Asset structure validation (essential before deploy)
+- `npm run prebuild` - Auto-runs validation before build (CI/CD integration)
+
+## 🧪 Testing is Essential
+
+**ALWAYS validate asset structure before deploying!** The slideshow factory's automated scanning depends on strict conventions. The integration test suite catches structural issues that would break slideshow generation.
+
+**Key Testing Principle:** Every asset directory change should be validated with `npm run validate:assets` to ensure:
+- Event naming follows `"Event Name_MM-DD-YYYY"` convention  
+- Dates are valid and properly formatted
+- Only supported image formats are present
+- Directory hierarchy is maintained
+- Photographer credits are correctly formatted
+
+**CI/CD Integration:** Tests automatically run before builds, preventing broken galleries from being deployed to production.
