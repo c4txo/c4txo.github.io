@@ -304,6 +304,17 @@ photo.bmp, image.tiff, file.pdf, video.mp4
 photo.jpg, image.png, graphic.gif, modern.webp
 ```
 
+**Filename Character Issues:**
+```bash
+# ❌ Contains colon (breaks CI/CD artifact uploads)
+"photo (photo: @user).jpg"        # Colon breaks GitHub Actions
+"sunset (credit: Jane Doe).png"   # Colon not allowed
+
+# ✅ Use dash instead of colon
+"photo (photo- @user).jpg"        # Dash works in CI/CD
+"sunset (credit- Jane Doe).png"   # Safe for artifact uploads
+```
+
 **Photographer Credit Format:**
 ```bash
 # ❌ Wrong format  
@@ -312,9 +323,9 @@ photo.jpg, image.png, graphic.gif, modern.webp
 "photo ().jpg"             # Empty credit
 
 # ✅ Correct format
-"sunset (photo: @john).jpg"      # Proper credit format
-"portrait (credit: Jane).png"    # Alternative credit style
-"landscape (by: Studio).gif"     # Flexible credit text
+"sunset (photo- @john).jpg"      # Proper credit format
+"portrait (credit- Jane).png"    # Alternative credit style
+"landscape (by- Studio).gif"     # Flexible credit text
 ```
 
 #### Build and Deployment Issues
@@ -448,16 +459,16 @@ const eventDate = extractDateFromEventName('Concert_12-25-2025');
 import { extractPhotoCredit, getCleanImageName } from '../utils/eventUtils';
 
 // Extract credit from filename
-const credit = extractPhotoCredit('photo (photo: @srdlj).jpg'); // Returns "photo: @srdlj"
+const credit = extractPhotoCredit('photo (photo- @srdlj).jpg'); // Returns "photo- @srdlj"
 const noCredit = extractPhotoCredit('photo.jpg'); // Returns null
 
 // Get clean filename
-const cleanName = getCleanImageName('photo (photo: @srdlj).jpg'); // Returns "photo"
+const cleanName = getCleanImageName('photo (photo- @srdlj).jpg'); // Returns "photo"
 ```
 
 **Filename Format Convention:**
 - Format: `"image_name (credit_info).extension"`
-- Example: `"lvlup_1 (photo: @srdlj).jpeg"`
+- Example: `"lvlup_1 (photo- @srdlj).jpeg"`
 - Credit text: Everything inside parentheses
 - Works with any file extension: jpg, jpeg, png, gif, webp
 
@@ -570,7 +581,8 @@ import { EventGrid } from '../components/SlideshowFactory';
 8. **Auto-Scroll Settings**: Consider user experience - disable for detailed viewing, enable for ambient display
 9. **Photographer Credits**: Use consistent filename format for attribution
    - Format: `"image_name (credit_info).extension"`
-   - Example: `"photo_1 (photo: @username).jpg"`
+   - Example: `"photo_1 (photo- @username).jpg"`
+   - **IMPORTANT**: Use dash `-` instead of colon `:` (colons break CI/CD uploads)
    - Credit appears as expandable info panel
    - Only shows when credit exists in filename
 10. **File Extensions**: Use supported formats: JPG, JPEG, PNG, GIF, WebP
@@ -627,7 +639,7 @@ import { EventGrid } from '../components/SlideshowFactory';
 - **Auto-Detection**: Automatic scanning, sorting, and page generation
 - **Auto-Copy**: Automatic asset copying from `assets/` to `public/assets/`
 - **Features**: Fade transitions, autoscroll, date parsing, full-screen modal, photographer credits
-- **Photo Credits**: `"filename (credit_info).extension"` format in image names
+- **Photo Credits**: `"filename (credit_info).extension"` format in image names (use dash instead of colon)
 - **Testing**: Integration tests validate all conventions automatically
 
 ### NPM Scripts

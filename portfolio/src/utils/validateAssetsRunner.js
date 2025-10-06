@@ -194,6 +194,12 @@ function validateImageFile(pageName, eventName, filename, result) {
     return;
   }
 
+  // Check for colon characters that break GitHub Actions artifact uploads
+  if (filename.includes(':')) {
+    result.errors.push(`Invalid filename "${filename}" in event "${eventName}": contains colon (:) which breaks CI/CD artifact uploads. Rename to use dash (-) instead of colon (:)`);
+    return;
+  }
+
   // Check for photographer credit format validation
   const creditMatch = filename.match(/^(.+?)\s*\(([^)]*)\)(\.[^.]+)$/);
   if (creditMatch) {
