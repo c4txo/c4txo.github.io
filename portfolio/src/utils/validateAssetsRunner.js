@@ -194,9 +194,25 @@ function validateImageFile(pageName, eventName, filename, result) {
     return;
   }
 
-  // Check for colon characters that break GitHub Actions artifact uploads
-  if (filename.includes(':')) {
-    result.errors.push(`Invalid filename "${filename}" in event "${eventName}": contains colon (:) which breaks CI/CD artifact uploads. Rename to use dash (-) instead of colon (:)`);
+  // Check for illegal characters that break GitHub Actions artifact uploads
+  const illegalChars = ['"', ':', '<', '>', '|', '*', '?', '\r', '\n'];
+  const foundIllegalChars = illegalChars.filter(char => filename.includes(char));
+  
+  if (foundIllegalChars.length > 0) {
+    const charNames = {
+      '"': 'double quote (")',
+      ':': 'colon (:)',
+      '<': 'less than (<)',
+      '>': 'greater than (>)',
+      '|': 'vertical bar (|)',
+      '*': 'asterisk (*)',
+      '?': 'question mark (?)',
+      '\r': 'carriage return (\\r)',
+      '\n': 'line feed (\\n)'
+    };
+    
+    const illegalCharsList = foundIllegalChars.map(char => charNames[char]).join(', ');
+    result.errors.push(`Invalid filename "${filename}" in event "${eventName}": contains illegal characters [${illegalCharsList}] which break CI/CD artifact uploads. Remove or replace these characters.`);
     return;
   }
 

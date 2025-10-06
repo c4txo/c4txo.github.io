@@ -1,8 +1,6 @@
 name: Assets Validation and Tests
 
 on:
-  push:
-    branches: [ 'main' ]
   pull_request:
     branches: [ 'main' ]
 

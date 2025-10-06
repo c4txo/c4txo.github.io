@@ -2,7 +2,17 @@
 
 ## System Overview
 
-The Slideshow Factory is an automated photo gallery system for Cat's portfolio website that dynamically generates slideshows based on directory structure. It eliminates manual page creation by automatically scanning the `assets/` directory and creating responsive photo galleries.
+The Slideshow Factory is an automated photo gallery system for Cat's portfolio website that dynamically generates slideshows based on directory structure**What Gets Validated**
+
+**Directory Structure Requirements:**
+- ✅ Three-level hierarchy: `assets/[Page]/[Event]/[Images]`
+- ✅ Event naming: `"Event Name_MM-DD-YYYY"` format
+- ✅ Date validity: Real dates only (no Feb 30th, etc.)
+- ✅ Image formats: JPG, JPEG, PNG, GIF, WebP only
+- ✅ Photographer credits: `"image (credit info).ext"` format
+- ✅ Filename safety: No illegal characters `" : < > | * ? \r \n`
+- ✅ Security: No path traversal attempts
+- ✅ File integrity: Valid image files, no corrupted datanates manual page creation by automatically scanning the `assets/` directory and creating responsive photo galleries.
 
 **Integration with CI/CD**
 **Automatic Validation:**
@@ -306,13 +316,23 @@ photo.jpg, image.png, graphic.gif, modern.webp
 
 **Filename Character Issues:**
 ```bash
-# ❌ Contains colon (breaks CI/CD artifact uploads)
-"photo (photo: @user).jpg"        # Colon breaks GitHub Actions
-"sunset (credit: Jane Doe).png"   # Colon not allowed
+# ❌ Illegal characters (break CI/CD artifact uploads)
+"photo: bad.jpg"          # Colon :
+"image<test>.png"         # Less than < Greater than >
+"file|name.gif"           # Vertical bar |
+"photo*.jpeg"             # Asterisk *
+"image?.webp"             # Question mark ?
+"photo"quote.jpg"         # Double quote "
+"file\rwith\nbreaks.png"  # Carriage return \r, Line feed \n
 
-# ✅ Use dash instead of colon
-"photo (photo- @user).jpg"        # Dash works in CI/CD
-"sunset (credit- Jane Doe).png"   # Safe for artifact uploads
+# ✅ Safe characters for CI/CD
+"photo- good.jpg"         # Use dash instead of colon
+"image_test.png"          # Use underscore instead of brackets
+"file_name.gif"           # Use underscore instead of pipe
+"photo_star.jpeg"         # Use word instead of asterisk
+"image_question.webp"     # Use word instead of question mark
+"photo_quote.jpg"         # Use word instead of quote
+"file_clean.png"          # Remove line breaks
 ```
 
 **Photographer Credit Format:**
@@ -582,7 +602,8 @@ import { EventGrid } from '../components/SlideshowFactory';
 9. **Photographer Credits**: Use consistent filename format for attribution
    - Format: `"image_name (credit_info).extension"`
    - Example: `"photo_1 (photo- @username).jpg"`
-   - **IMPORTANT**: Use dash `-` instead of colon `:` (colons break CI/CD uploads)
+   - **IMPORTANT**: Avoid illegal characters `" : < > | * ? \r \n` (break CI/CD uploads)
+   - Use safe alternatives: dash `-`, underscore `_`, or words instead
    - Credit appears as expandable info panel
    - Only shows when credit exists in filename
 10. **File Extensions**: Use supported formats: JPG, JPEG, PNG, GIF, WebP
