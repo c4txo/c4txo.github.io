@@ -1,13 +1,14 @@
 // src/components/Slideshow.js
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { formatEventDate, getEventDisplayName } from '../utils/eventUtils';
+import { formatEventDate, getEventDisplayName, extractPhotoCredit } from '../utils/eventUtils';
 
-function SlideshowContent({ event, className = '', autoScrollInterval = 5000, disableAutoScroll = true }) {
+function SlideshowContent({ event, className = '', autoScrollInterval = 5000, disableAutoScroll = true, showPhotoCredits = true }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAutoScrolling, setIsAutoScrolling] = useState(!disableAutoScroll);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showCredit, setShowCredit] = useState(false);
   const intervalRef = useRef(null);
 
   const { name, images } = event;
@@ -72,6 +73,11 @@ function SlideshowContent({ event, className = '', autoScrollInterval = 5000, di
     };
   }, [isAutoScrolling, images.length, isModalOpen, autoScrollInterval, isTransitioning]);
 
+  // Hide credit panel when image changes
+  useEffect(() => {
+    setShowCredit(false);
+  }, [currentImageIndex]);
+
   // Pause autoscroll on manual navigation
   const handleManualNavigation = (navigationFn) => {
     if (intervalRef.current) {
@@ -123,6 +129,24 @@ function SlideshowContent({ event, className = '', autoScrollInterval = 5000, di
             onClick={openModal}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
+
+          {/* Photo Credit Info Button */}
+          {showPhotoCredits && extractPhotoCredit(currentImage.filename) && (
+            <button
+              onClick={() => setShowCredit(!showCredit)}
+              className="absolute top-3 right-3 bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-black/80 transition-colors z-10"
+              aria-label="Photo credit information"
+            >
+              ⓘ
+            </button>
+          )}
+
+          {/* Expandable Credit Panel */}
+          {showPhotoCredits && showCredit && extractPhotoCredit(currentImage.filename) && (
+            <div className="absolute top-12 right-3 bg-black/90 text-white px-3 py-2 rounded-lg text-sm max-w-64 z-20 shadow-lg">
+              <div>{extractPhotoCredit(currentImage.filename)}</div>
+            </div>
+          )}
           
           {/* Navigation Arrows */}
           {images.length > 1 && (
@@ -264,7 +288,7 @@ function SlideshowContent({ event, className = '', autoScrollInterval = 5000, di
   );
 }
 
-export default function Slideshow({ event, className = '', autoScrollInterval = 5000, disableAutoScroll = true }) {
+export default function Slideshow({ event, className = '', autoScrollInterval = 5000, disableAutoScroll = true, showPhotoCredits = true }) {
   // Early return before any hooks to satisfy ESLint rules-of-hooks
   if (!event || !event.images || event.images.length === 0) {
     return null;
@@ -276,6 +300,7 @@ export default function Slideshow({ event, className = '', autoScrollInterval = 
       className={className} 
       autoScrollInterval={autoScrollInterval}
       disableAutoScroll={disableAutoScroll}
+      showPhotoCredits={showPhotoCredits}
     />
   );
 }
