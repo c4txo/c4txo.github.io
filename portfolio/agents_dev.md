@@ -130,10 +130,11 @@ console.log(assets); // Should show new Fashion page
 ```jsx
 <SlideshowFactory 
   pageAssets={pageAssets}
-  layout="grid"        // Options: "grid", "stack", "masonry"
-  maxColumns={3}       // 1-4 columns for grid layout
-  showTitle={true}     // Show/hide page title
-  className="custom"   // Additional CSS classes
+  layout="grid"            // Options: "grid", "stack", "masonry"
+  maxColumns={3}           // 1-4 columns for grid layout
+  showTitle={true}         // Show/hide page title
+  disableAutoScroll={true} // Disable auto-scroll for ALL slideshows (default: true)
+  className="custom"       // Additional CSS classes
 />
 ```
 
@@ -148,14 +149,22 @@ Modify the page file (e.g., `pages/maidcafe.js`) or the dynamic page template (`
 ```jsx
 <Slideshow 
   event={event} 
-  autoScrollInterval={8000}  // Auto-advance interval (default: 8 seconds)
-  className="custom-class"   // Additional styling
+  autoScrollInterval={8000}     // Auto-advance interval (default: 8 seconds)
+  disableAutoScroll={true}      // Disable auto-scrolling (default: true)
+  className="custom-class"      // Additional styling
 />
 ```
 
+**Auto-Scroll Control**:
+- `disableAutoScroll={true}` (default): Slideshow starts with auto-scroll **OFF**
+- `disableAutoScroll={false}`: Slideshow starts with auto-scroll **ON**
+- Users can still manually toggle auto-scroll using the play/pause button
+- Parameter only affects the initial state, not the user's ability to control it
+
 **Built-in Features**:
 - **Fade Transitions**: Smooth 300ms fade between images
-- **Autoscroll**: Automatic advancement with play/pause control
+- **Autoscroll**: Automatic advancement with play/pause control (disabled by default)
+- **Auto-Scroll Control**: Configurable via `disableAutoScroll` parameter
 - **Full Screen Modal**: Click any image for full-screen viewing
 - **Navigation**: Arrow keys, thumbnails, and navigation buttons
 - **Date Display**: Automatically parses and shows event dates
@@ -305,6 +314,44 @@ const eventDate = extractDateFromEventName('Concert_12-25-2025');
 - `assetScanner.js` is for server-side operations only
 - Both files share the same date parsing logic for consistency
 
+#### Auto-Scroll Control Patterns
+
+**Enable auto-scroll for all slideshows on a page:**
+```javascript
+<SlideshowFactory 
+  pageAssets={pageAssets}
+  disableAutoScroll={false}  // All slideshows auto-advance
+/>
+```
+
+**Mixed control - factory disabled, individual enabled:**
+```javascript
+<SlideshowFactory pageAssets={pageAssets} disableAutoScroll={true} />
+
+{/* Later, individual slideshow with auto-scroll enabled */}
+<Slideshow 
+  event={specificEvent} 
+  disableAutoScroll={false}  // This one auto-advances
+/>
+```
+
+**Different intervals per slideshow:**
+```javascript
+{/* Fast slideshow - 3 seconds */}
+<Slideshow 
+  event={eventA} 
+  disableAutoScroll={false}
+  autoScrollInterval={3000}
+/>
+
+{/* Slow slideshow - 10 seconds */}
+<Slideshow 
+  event={eventB} 
+  disableAutoScroll={false}
+  autoScrollInterval={10000}
+/>
+```
+
 #### Creating Custom Page Layouts
 ```javascript
 // Using the generic CategoryPage component (recommended)
@@ -334,6 +381,7 @@ export default function CustomPage({ pageAssets }) {
           layout="stack"
           maxColumns={1}
           showTitle={true}
+          disableAutoScroll={false}  // Enable auto-scroll for all slideshows
           className="max-w-4xl mx-auto"
         />
       </main>
@@ -372,7 +420,8 @@ import { EventGrid } from '../components/SlideshowFactory';
 5. **Image Quality**: Maintain consistent quality within events (images display with object-contain)
 6. **Performance**: Keep individual events to ~20-50 images max for optimal loading
 7. **Testing**: Always test slideshow functionality including autoscroll and fade transitions
-8. **File Extensions**: Use supported formats: JPG, JPEG, PNG, GIF, WebP
+8. **Auto-Scroll Settings**: Consider user experience - disable for detailed viewing, enable for ambient display
+9. **File Extensions**: Use supported formats: JPG, JPEG, PNG, GIF, WebP
 
 ### System Limitations
 

@@ -3,10 +3,10 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { formatEventDate, getEventDisplayName } from '../utils/eventUtils';
 
-function SlideshowContent({ event, className = '', autoScrollInterval = 5000 }) {
+function SlideshowContent({ event, className = '', autoScrollInterval = 5000, disableAutoScroll = true }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(!disableAutoScroll);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const intervalRef = useRef(null);
 
@@ -264,11 +264,18 @@ function SlideshowContent({ event, className = '', autoScrollInterval = 5000 }) 
   );
 }
 
-export default function Slideshow({ event, className = '', autoScrollInterval = 5000 }) {
+export default function Slideshow({ event, className = '', autoScrollInterval = 5000, disableAutoScroll = true }) {
   // Early return before any hooks to satisfy ESLint rules-of-hooks
   if (!event || !event.images || event.images.length === 0) {
     return null;
   }
 
-  return <SlideshowContent event={event} className={className} autoScrollInterval={autoScrollInterval} />;
+  return (
+    <SlideshowContent 
+      event={event} 
+      className={className} 
+      autoScrollInterval={autoScrollInterval}
+      disableAutoScroll={disableAutoScroll}
+    />
+  );
 }

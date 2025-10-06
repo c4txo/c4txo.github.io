@@ -8,13 +8,17 @@ import { formatEventDate, getEventDisplayName } from '../utils/eventUtils';
  * @param {Object} pageAssets - Assets data for the page from assetScanner
  * @param {string} layout - Layout style: 'grid', 'stack', or 'masonry'
  * @param {string} className - Additional CSS classes
+ * @param {boolean} showTitle - Whether to show the page title
+ * @param {number} maxColumns - Maximum number of columns in grid layout
+ * @param {boolean} disableAutoScroll - Disable auto-scrolling (default: true)
  */
 export default function SlideshowFactory({ 
   pageAssets, 
   layout = 'grid', 
   className = '',
   showTitle = true,
-  maxColumns = 3
+  maxColumns = 3,
+  disableAutoScroll = true
 }) {
   if (!pageAssets || !pageAssets.events || Object.keys(pageAssets.events).length === 0) {
     return (
@@ -70,6 +74,7 @@ export default function SlideshowFactory({
             <Slideshow 
               event={event} 
               className={layout === 'stack' ? 'max-w-2xl mx-auto' : ''}
+              disableAutoScroll={disableAutoScroll}
             />
           </div>
         ))}
