@@ -2,8 +2,9 @@
 
 ## System Overview
 
-The Slideshow Factory is an automated photo gallery system for Cat's portfolio website that dynamically generates slideshows based on directory structure. It eliminates t**Integration with CI/CD**
+The Slideshow Factory is an automated photo gallery system for Cat's portfolio website that dynamically generates slideshows based on directory structure. It eliminates manual page creation by automatically scanning the `assets/` directory and creating responsive photo galleries.
 
+**Integration with CI/CD**
 **Automatic Validation:**
 - Validation runs automatically before every build (`npm run prebuild`)
 - GitHub Actions validates on push/PR
