@@ -16,7 +16,7 @@ export default function NavBar() {
       <span>/</span>
       <Link href="/coming-soon" className="hover:underline">Brand Collaborations</Link>
       <span>/</span>
-      <Link href="/coming-soon" className="hover:underline">Cosplays</Link>
+      <Link href="/cosplays" className="hover:underline">Cosplays</Link>
       <span>/</span>
       <Link href="/coming-soon" className="hover:underline">Event Appearances</Link>
       <span>/</span>
