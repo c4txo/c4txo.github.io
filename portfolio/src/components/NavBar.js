@@ -12,6 +12,8 @@ export default function NavBar() {
         <Image src="/home-icon.svg" alt="Home" width={20} height={20} className="mr-1 invert brightness-0" />
       </Link>
       <span>|</span>
+      <Link href="/maidcafe" className="hover:underline">Maid Cafe</Link>
+      <span>/</span>
       <Link href="/coming-soon" className="hover:underline">Brand Collaborations</Link>
       <span>/</span>
       <Link href="/coming-soon" className="hover:underline">Cosplays</Link>
@@ -19,8 +21,6 @@ export default function NavBar() {
       <Link href="/coming-soon" className="hover:underline">Event Appearances</Link>
       <span>/</span>
       <Link href="/coming-soon" className="hover:underline">Fashion</Link>
-      <span>/</span>
-      <Link href="/maidcafe" className="hover:underline">Maid Cafe</Link>
     </span>
   );
 }
